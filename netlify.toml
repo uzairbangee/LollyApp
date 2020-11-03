@@ -1,0 +1,4 @@
+[build]
+    command = "yarn build && cd functions/lolly && yarn"
+    publish = "public"
+    functions = "functions"

@@ -9,7 +9,6 @@ const Layout = ({children}) => {
     return (
         <div className="container">
             <Header />
-            <p>Customize and Order your Favourite Popsticle Sticks</p>
             {children}
         </div>
     )

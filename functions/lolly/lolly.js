@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server-lambda')
-const faunadb = require('faunadb');
-const q = faunadb.query;
+const faunadb = require('faunadb'),
+  q = faunadb.query;
 const shortid = require("shortid");
 const dotenv = require('dotenv');
 dotenv.config();
@@ -24,7 +24,7 @@ const typeDefs = gql`
   }
 
   type Mutation{
-    createLolly(name: String!, email: String!, phone: String!, address: String!, quantity: Int!, price: Int!, flavourTop: String!,flavourMiddle: String!, flavourBottom: String!) : Lolly
+    createLolly(name: String!, email: String!, phone: String!, address: String!, quantity: Int!, price: Int!, flavourTop: String!, flavourMiddle: String!, flavourBottom: String!) : Lolly
   }
 `
 
@@ -36,9 +36,7 @@ const resolvers = {
   },
   Mutation : {
     createLolly : async (_, args) => {
-      console.log('IN');
       try{
-        console.log(args);
         const client = new faunadb.Client({secret: process.env.FAUNADB_ADMIN_KEY});
         const id = shortid.generate();
         

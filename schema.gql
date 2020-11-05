@@ -1,0 +1,16 @@
+type Query {
+   lollies:[Lolly!]
+}
+
+type Lolly @collection(name: "lollies"){
+    name: String!
+    email: String!
+    phone: String!
+    address: String!
+    quantity: Int!
+    price: Int!
+    flavourTop: String!
+    flavourMiddle: String!
+    flavourBottom: String!
+    path: String!
+}

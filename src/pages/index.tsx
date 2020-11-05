@@ -7,7 +7,7 @@ import {Link} from 'gatsby';
 export default function Home() {
   return (
     <Layout>
-
+      <p>Customize and Order your Favourite Popsticle Sticks</p>
       <div className="listLollies">
         <div>
           <Lolly fillLollyTop="#d52358" fillLollyMiddle="#e95946" fillLollyBottom="#deaa43"  />

@@ -9,8 +9,8 @@ import TextField from '@material-ui/core/TextField';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 
 const createLollyMutation = gql`
-    mutation createLolly($name: String!, $email: String!, $phone: String!, $address: String!, $qunatity: Int!, $price: Int!, $flavourTop: String!, $flavourMiddle: String!,$flavourBottom: String!) {
-        createLolly(name: $name, email: $email, phone: $phone, address: $address, qunatity: $qunatity, price: $price, flavourTop: $flavourTop, flavourMiddle: $flavourMiddle,flavourBottom: $flavourBottom) {
+    mutation createLolly($name: String!, $email: String!, $phone: String!, $address: String!, $quantity: Int!, $price: Int!, $flavourTop: String!, $flavourMiddle: String!,$flavourBottom: String!) {
+        createLolly(name: $name, email: $email, phone: $phone, address: $address, quantity: $quantity, price: $price, flavourTop: $flavourTop, flavourMiddle: $flavourMiddle,flavourBottom: $flavourBottom) {
             path
         }
     }
@@ -48,7 +48,7 @@ export default function CreateNew() {
 
   return (
     <Layout>
-
+        <p>Customize and Order your Favourite Popsticle Sticks</p>
         <div className="lollyFormDiv">
             <div>
                 <Lolly fillLollyTop={color1} fillLollyMiddle={color2} fillLollyBottom={color3} />

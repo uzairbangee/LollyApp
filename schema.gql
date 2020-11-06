@@ -1,5 +1,6 @@
 type Query {
    lollies:[Lolly!]
+   LollyByPath(path: String!): Lolly!
 }
 
 type Lolly @collection(name: "lollies"){

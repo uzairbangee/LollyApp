@@ -2,12 +2,15 @@ const { ApolloServer, gql } = require('apollo-server-lambda')
 const faunadb = require('faunadb'),
   q = faunadb.query;
 const shortid = require("shortid");
+const client = new faunadb.Client({secret: process.env.FAUNADB_ADMIN_KEY});
+const axios = require("axios");
 const dotenv = require('dotenv');
 dotenv.config();
 
 const typeDefs = gql`
   type Query {
-    hello: String
+    allLollies: [Lolly!]
+    lollyByPath(path: String!): Lolly!
   }
 
   type Lolly {
@@ -30,14 +33,50 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    hello: () => {
-      return 'Hello, world!'
+    allLollies: async () => {
+      try{
+        const result = await client.query(
+          q.Map(
+            q.Paginate(q.Documents(q.Collection('lollies'))),
+            q.Lambda(x => q.Get(x))
+          )
+        );
+        console.log(result);
+        
+        return result.data.map(dt => (
+          {
+            ...dt.data
+          }
+        ))
+      }
+      catch(err){
+        return err
+      }
+    },
+    lollyByPath: async (_, {path}) => {
+      try{
+        console.log(path)
+        const result = await client.query(
+          q.Get(
+            q.Match(q.Index("lolly_by_path"), path)
+          )
+        );
+
+        console.log(result)
+        
+        return {
+          id : result.ref.id,
+          ...result.data
+        }
+      }
+      catch(err){
+        console.log(err)
+      }
     }
   },
   Mutation : {
     createLolly : async (_, args) => {
       try{
-        const client = new faunadb.Client({secret: process.env.FAUNADB_ADMIN_KEY});
         const id = shortid.generate();
         
         const data = {
@@ -50,6 +89,14 @@ const resolvers = {
             data: data
           })
         );
+
+        axios.post("https://api.netlify.com/build_hooks/5fa3d851489d2c4de8097f89")
+          .then((response) => {
+            console.log(response)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
 
         return {
           id: result.ref.id,

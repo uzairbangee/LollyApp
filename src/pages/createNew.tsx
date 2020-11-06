@@ -7,6 +7,7 @@ import { Formik, Form, ErrorMessage, Field } from 'formik';
 import * as Yup from 'yup';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { navigate } from "gatsby"
 
 const createLollyMutation = gql`
     mutation createLolly($name: String!, $email: String!, $phone: String!, $address: String!, $quantity: Int!, $price: Int!, $flavourTop: String!, $flavourMiddle: String!,$flavourBottom: String!) {
@@ -48,96 +49,98 @@ export default function CreateNew() {
 
   return (
     <Layout>
-        <p>Customize and Order your Favourite Popsticle Sticks</p>
-        <div className="lollyFormDiv">
-            <div>
-                <Lolly fillLollyTop={color1} fillLollyMiddle={color2} fillLollyBottom={color3} />
-            </div>
-            <LollyColorBox
-                color1={color1}
-                color2={color2}
-                color3={color3}
-                setColor1={setColor1}
-                setColor2={setColor2}
-                setColor3={setColor3}
-            />
-            <div>
-                <Formik 
-                    initialValues={ {
-                        name: "",
-                        email: "",
-                        phone: "",
-                        address: "",
-                        quantity: 1
-                    }} 
-                    validationSchema={formSchema}
-                    onSubmit = {(values, {resetForm}) => {
-                        createLolly({
-                            variables : {
-                                name: values.name,
-                                email: values.email,
-                                phone: values.phone,
-                                address: values.address,
-                                quantity: values.quantity,
-                                price: values.quantity * 10,
-                                flavourTop: color1,
-                                flavourMiddle: color2,
-                                flavourBottom: color3
-                            }
-                        })
-                        resetForm({values: {
-                                name: "",
-                                email: "",
-                                phone: "",
-                                address: "",
-                                quantity: 1
-                            }
-                        });
-                    }}
-                >
-                    {
-                        (formik) => (
-                            <Form onSubmit={formik.handleSubmit}>
-                                <div>
-                                <Field type="text" as={TextField} classes={{root: classes.textField}} variant="outlined" label="Name" name="name" id="name"/>
-                                    <ErrorMessage name="name" render={(msg)=>(
-                                        <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
-                                    )} />
-                                </div>
-                                <div>
-                                <Field type="email" as={TextField} classes={{root: classes.textField}} variant="outlined" label="Email" name="email" id="email"/>
-                                    <ErrorMessage name="email" render={(msg)=>(
-                                        <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
-                                    )} />
-                                </div>
-                                <div>
-                                <Field type="text" as={TextField} classes={{root: classes.textField}} variant="outlined" label="Phone" name="phone" id="phone"/>
-                                    <ErrorMessage name="phone" render={(msg)=>(
-                                        <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
-                                    )} />
-                                </div>
-                                <div>
-                                <Field type="text" as={TextField} multiline rows={3} variant="outlined" classes={{root: classes.textField}} label="Address" name="address" id="address"/>
-                                    <ErrorMessage name="address" render={(msg)=>(
-                                        <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
-                                    )} />
-                                </div>
 
-                                <div>
-                                <Field type="number" as={TextField} classes={{root: classes.textField}} variant="outlined" label="Quantity" name="quantity" id="quantity"/>
-                                    <ErrorMessage name="quantity" render={(msg)=>(
-                                        <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
-                                    )} />
-                                </div>
-                                <div>
-                                    <button type="submit" className="button_order">Order Now</button>
-                                </div>
-                            </Form>
-                        )
-                    }
-                </Formik>
+            <p>Customize and Order your Favourite Popsticle Sticks</p>
+            <div className="lollyFormDiv">
+                <div>
+                    <Lolly fillLollyTop={color1} fillLollyMiddle={color2} fillLollyBottom={color3} />
+                </div>
+                <LollyColorBox
+                    color1={color1}
+                    color2={color2}
+                    color3={color3}
+                    setColor1={setColor1}
+                    setColor2={setColor2}
+                    setColor3={setColor3}
+                />
+                <div>
+                    <Formik 
+                        initialValues={ {
+                            name: "",
+                            email: "",
+                            phone: "",
+                            address: "",
+                            quantity: 1
+                        }} 
+                        validationSchema={formSchema}
+                        onSubmit = { async (values, {resetForm}) => {
+                            const result = await createLolly({
+                                variables : {
+                                    name: values.name,
+                                    email: values.email,
+                                    phone: values.phone,
+                                    address: values.address,
+                                    quantity: values.quantity,
+                                    price: values.quantity * 10,
+                                    flavourTop: color1,
+                                    flavourMiddle: color2,
+                                    flavourBottom: color3
+                                }
+                            })
+                            resetForm({values: {
+                                    name: "",
+                                    email: "",
+                                    phone: "",
+                                    address: "",
+                                    quantity: 1
+                                }
+                            });
+                            navigate(`/invoices/${result.data.createLolly.path}`);
+                        }}
+                    >
+                        {
+                            (formik) => (
+                                <Form onSubmit={formik.handleSubmit}>
+                                    <div>
+                                    <Field type="text" as={TextField} classes={{root: classes.textField}} variant="outlined" label="Name" name="name" id="name"/>
+                                        <ErrorMessage name="name" render={(msg)=>(
+                                            <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
+                                        )} />
+                                    </div>
+                                    <div>
+                                    <Field type="email" as={TextField} classes={{root: classes.textField}} variant="outlined" label="Email" name="email" id="email"/>
+                                        <ErrorMessage name="email" render={(msg)=>(
+                                            <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
+                                        )} />
+                                    </div>
+                                    <div>
+                                    <Field type="text" as={TextField} classes={{root: classes.textField}} variant="outlined" label="Phone" name="phone" id="phone"/>
+                                        <ErrorMessage name="phone" render={(msg)=>(
+                                            <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
+                                        )} />
+                                    </div>
+                                    <div>
+                                    <Field type="text" as={TextField} multiline rows={3} variant="outlined" classes={{root: classes.textField}} label="Address" name="address" id="address"/>
+                                        <ErrorMessage name="address" render={(msg)=>(
+                                            <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
+                                        )} />
+                                    </div>
+
+                                    <div>
+                                    <Field type="number" as={TextField} classes={{root: classes.textField}} variant="outlined" label="Quantity" name="quantity" id="quantity"/>
+                                        <ErrorMessage name="quantity" render={(msg)=>(
+                                            <span style={{color:"coral",display: 'block',width: '100px'}}>{msg}</span>
+                                        )} />
+                                    </div>
+                                    <div>
+                                        <button type="submit" className="button_order">Order Now</button>
+                                    </div>
+                                </Form>
+                            )
+                        }
+                    </Formik>
+                </div>
             </div>
-        </div>
     </Layout>
   );
 }

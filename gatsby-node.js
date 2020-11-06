@@ -22,7 +22,7 @@ exports.createPages = async ({ graphql, actions }) => {
             path : `invoices/${dt.path}`,
             component: path.resolve(`./src/templates/invoice.tsx`),
             context: {
-                id: dt._id,
+                lollypath: dt.path,
             },
         })
     })

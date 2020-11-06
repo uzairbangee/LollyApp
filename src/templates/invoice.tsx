@@ -1,52 +1,12 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { graphql } from 'gatsby';
 import Layout from "../components/Layout"
 import Lolly from "../components/Lolly"
 
-export default ({data}) => {
-    console.log(data)
-    const {findLollyByID} = data.fauna
-    return (
-        <Layout>
-            <p>Your Invoice for Order No. {findLollyByID.path} </p>
-            <div className="lollyFormDiv">
-                <div>
-                    <Lolly fillLollyTop={findLollyByID.flavourTop} fillLollyMiddle={findLollyByID.flavourMiddle} fillLollyBottom={findLollyByID.flavourBottom} />
-                </div>
-                <div className="invoice">
-                    <h4 className="invoice_head">INVOICE # {findLollyByID.path}</h4>
-                    <p>{findLollyByID.name}</p>
-                    <p>{findLollyByID.email}</p>
-                    <p>{findLollyByID.address}</p>
-                    <p>{findLollyByID.phone}</p>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th></th>
-                                <th>Quantity</th>
-                                <th>Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Lollies</td>
-                                <td>{findLollyByID.quantity}</td>
-                                <td>${findLollyByID.price}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p className="total"><b>Total : </b> ${findLollyByID.price}</p>
-                    <h6 className="billed">You will be billed at doorstep</h6>
-                </div>
-            </div>
-        </Layout>
-    )
-}
-
 export const query = graphql`
-    query($id: ID!){
+    query MyQuery($lollypath: String!){
         fauna{
-            findLollyByID(id : $id){
+            LollyByPath(path: $lollypath){
                 name
                 email
                 phone
@@ -61,3 +21,46 @@ export const query = graphql`
         }
     }
 `
+
+const Invoice = ({data}) => {
+    console.log(data);
+    const {LollyByPath} = data.fauna
+
+    return (
+        <Layout>
+            <p>Your Invoice for Order No. {LollyByPath.path} </p>
+            <div className="lollyFormDiv">
+                <div>
+                    <Lolly fillLollyTop={LollyByPath.flavourTop} fillLollyMiddle={LollyByPath.flavourMiddle} fillLollyBottom={LollyByPath.flavourBottom} />
+                </div>
+                <div className="invoice">
+                    <h4 className="invoice_head">INVOICE # {LollyByPath.path}</h4>
+                    <p>{LollyByPath.name}</p>
+                    <p>{LollyByPath.email}</p>
+                    <p>{LollyByPath.address}</p>
+                    <p>{LollyByPath.phone}</p>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Lollies</td>
+                                <td>{LollyByPath.quantity}</td>
+                                <td>${LollyByPath.price}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p className="total"><b>Total : </b> ${LollyByPath.price}</p>
+                    <h6 className="billed">You will be billed at doorstep</h6>
+                </div>
+            </div>
+        </Layout>
+    )
+}
+
+export default Invoice;

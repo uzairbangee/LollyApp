@@ -1,12 +1,12 @@
 import React from "react"
 
-interface Props {
-    fillLollyTop: string
-    fillLollyMiddle: string
-    fillLollyBottom: string
-}
+// interface Props {
+//     fillLollyTop: string
+//     fillLollyMiddle: string
+//     fillLollyBottom: string
+// }
 
-const Lolly = ({fillLollyTop, fillLollyMiddle, fillLollyBottom} : Props) => {
+const Lolly = ({fillLollyTop, fillLollyMiddle, fillLollyBottom}) => {
   return (
     <svg className="lollipop" width="163px" height="431px" viewBox="0 0 163 431" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <defs>

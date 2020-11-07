@@ -4,6 +4,7 @@ module.exports = {
   /* Your site config here */
   plugins: [
     `gatsby-plugin-material-ui`,
+    `gatsby-plugin-typescript`,
     {
       resolve: 'gatsby-source-graphql',
       options: {

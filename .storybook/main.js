@@ -1,13 +1,14 @@
 module.exports = {
   "stories": [
-    "../src/**/*.stories.mdx",
-    "../src/**/*.stories.@(js|jsx|ts|tsx)"
+    "../src/**/*.stories.@(tsx)"
   ],
   "addons": [
     "@storybook/addon-essentials",
     '@storybook/addon-actions',
 		'@storybook/addon-links',
 		'@storybook/addon-viewport/register',
-		'@storybook/addon-storysource',
+    '@storybook/addon-storysource',
+    '@storybook/addon-controls',
+    "@storybook/preset-typescript"
   ]
 }
